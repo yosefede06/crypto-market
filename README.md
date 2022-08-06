@@ -1,4 +1,6 @@
-## Realtime crypto prices including Bitcoin, Ethereum, XRP, and more with a minimalist interface
+# crypto-maker
+
+Realtime crypto prices including Bitcoin, Ethereum, XRP, and more using a minimalist interface
 
 
 ![alt text](https://raw.githubusercontent.com/yosefede06/crypto-market/main/assets/merge_black_white_mob.png)
