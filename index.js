@@ -1,3 +1,4 @@
+let table_loaded = false
 const FILTER = ['P', 'c', 's']
 
 var formatter = new Intl.NumberFormat('en-US', {
@@ -101,9 +102,6 @@ function generate_table() {
             create_table()
         }
         first_call = false
-
-
-
     })
     instance.run()
 
@@ -117,9 +115,6 @@ function update_header(inBlock){
 
 function create_table() {
     table = $("#performance-id").DataTable({
-        "language": {
-            "processing": '<i class="fa fa-spinner fa-spin" style="font-size:24px;color:rgb(75, 183, 245);"></i>'
-        },
         responsive: {
             details: {
                 type: 'inline'
@@ -131,6 +126,7 @@ function create_table() {
         scrollCollapse: true,
         paging: false,
     });
+    table_loaded = true
     return false
 }
 function toFormat(key, value){
@@ -158,18 +154,6 @@ function update_row(symbol){
         }
     }
 }
-
-function imageExists(image_url){
-
-    var http = new XMLHttpRequest();
-
-    http.open('HEAD', image_url, false);
-    http.send();
-
-    return http.status != 404;
-
-}
-
 
 function new_row(element, symbol){
     let tr = create_element("tr")
@@ -208,14 +192,16 @@ function logo(image){
                 "properties" :
                     {
                         "src" : image,
-                        "style": " font-size: 34px; filter:  brightness(0) invert(1);",
-                        "class":`cf cf-${image}`
+                        "style": `font-size: 34px; filter:  ${set_logo_color()}`,
+                        "class":`cf cf-${image} dark-image-class`
                     }
             }
         ]
     )
     return td;
 }
+
+
 
 const arr_ticker = ["!ticker_1h@arr@3000ms", "!ticker_4h@arr@3000ms", "!miniTicker@arr@3000ms"]
 Array.from(document.getElementsByClassName("ticker-class")).forEach((value, ind) => {
@@ -233,8 +219,35 @@ Array.from(document.getElementsByClassName("market-type")).forEach((value, ind) 
 
 generate_table()
 
+function set_logo_color(){
+    return check_dark_mode() ? "brightness(0) invert(1)" : "brightness(0)"
+}
 
-// document.getElementById("dark_icon").addEventListener("click",()=>{
-//     KTApp.setThemeMode('light');
-// })
+function check_dark_mode(){
+    return !localStorage.getItem("light-mode")
+}
+
+function set_light_mode(){
+    KTApp.setThemeMode('light');
+    $(".dark-image-class").css("filter", "brightness(0)")
+    $("#dark_icon").attr("class", "fonticon-moon fs-2 text-dark")
+    localStorage.setItem("light-mode", "true")
+}
+
+function set_dark_mode(){
+    KTApp.setThemeMode('dark');
+    $(".dark-image-class").css("filter", "brightness(0) invert(1)")
+    $("#dark_icon").attr("class", "fonticon-sun fs-2")
+    localStorage.removeItem("light-mode")
+}
+
+function toggle_dark(change) {
+    change ? (check_dark_mode() ? set_light_mode() : set_dark_mode()) : (check_dark_mode() ? set_dark_mode() : set_light_mode())
+}
+toggle_dark(false)
+document.getElementById("dark_icon").addEventListener("click",()=>{
+    if(table_loaded) {
+        toggle_dark(true)
+    }
+})
 
