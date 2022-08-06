@@ -1,7 +1,7 @@
 # crypto-market
 Realtime crypto prices including Bitcoin, Ethereum, XRP, and more with a minimalist dark/light interface
 
-![alt text](https://raw.githubusercontent.com/yosefede06/crypto-market/main/assets/merge_black_white_mobile.png)
+![alt text](https://raw.githubusercontent.com/yosefede06/crypto-market/main/assets/merge_black_white_mob.png)
 
 
 ### Technologies:
