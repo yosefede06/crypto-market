@@ -274,6 +274,7 @@ function set_light_mode(){
     KTApp.setThemeMode('light');
     $(".dark-image-class").css("filter", "brightness(0)")
     $("#dark_icon").attr("class", "fonticon-moon fs-2 text-dark")
+    $("#header-top-color").attr("content", "#f4f6f9")
     localStorage.removeItem("dark-mode")
 }
 
@@ -281,6 +282,7 @@ function set_dark_mode(){
     KTApp.setThemeMode('dark');
     $(".dark-image-class").css("filter", "brightness(0) invert(1)")
     $("#dark_icon").attr("class", "fonticon-sun fs-2")
+    $("#header-top-color").attr("content", "#151521")
     localStorage.setItem("dark-mode", "true")
 
 }
