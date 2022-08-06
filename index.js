@@ -200,8 +200,8 @@ function chart_element(id_val){
                 "properties":
                     {
                         "id": `${id_val}-chart`,
-                        "class": "me-10 mt-n7 min-h-auto",
-                        "style": "width: 150px; height: 80px",
+                        "class": "mt-n7 min-h-auto",
+                        "style": `width: ${window.innerWidth * 0.1 + 70}px; height: 80px`,
                     }
             }
             ]
