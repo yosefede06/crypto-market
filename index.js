@@ -122,7 +122,7 @@ function create_table() {
         },
         order: [[0, 'desc']],
         // sDom: 'i',
-        scrollY: `${(window.innerHeight * 0.67).toString()}px`,
+        scrollY: `${(window.innerHeight * 0.61).toString()}px`,
         scrollCollapse: true,
         paging: false,
     });
@@ -206,7 +206,9 @@ function logo(image){
 const arr_ticker = ["!ticker_1h@arr@3000ms", "!ticker_4h@arr@3000ms", "!miniTicker@arr@3000ms"]
 Array.from(document.getElementsByClassName("ticker-class")).forEach((value, ind) => {
     value.addEventListener("change",(element)=> {
-        instance.ticker = arr_ticker[ind]
+        if(table_loaded) {
+            instance.ticker = arr_ticker[ind]
+        }
     })
 })
 Array.from(document.getElementsByClassName("market-type")).forEach((value, ind) => {
@@ -245,9 +247,9 @@ function toggle_dark(change) {
     change ? (check_dark_mode() ? set_light_mode() : set_dark_mode()) : (check_dark_mode() ? set_dark_mode() : set_light_mode())
 }
 toggle_dark(false)
-document.getElementById("dark_icon").addEventListener("click",()=>{
-    if(table_loaded) {
+function dark_listener() {
+    if (table_loaded) {
         toggle_dark(true)
     }
-})
+}
 
