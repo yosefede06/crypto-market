@@ -55,7 +55,7 @@ function data_fill_column(price, title, class_name){
                     {
                         "class" : "text-gray-400 fw-bold d-block fs-7"
                     },
-                "text" : "Binance Spot"
+                "text" : "Binance"
             },
         ]
     )
@@ -117,6 +117,9 @@ function update_header(inBlock){
 
 function create_table() {
     table = $("#performance-id").DataTable({
+        "language": {
+            "processing": '<i class="fa fa-spinner fa-spin" style="font-size:24px;color:rgb(75, 183, 245);"></i>'
+        },
         responsive: {
             details: {
                 type: 'inline'
@@ -124,7 +127,7 @@ function create_table() {
         },
         order: [[0, 'desc']],
         // sDom: 'i',
-        scrollY: '550px',
+        scrollY: `${(window.innerHeight * 0.67).toString()}px`,
         scrollCollapse: true,
         paging: false,
     });
@@ -135,7 +138,7 @@ function toFormat(key, value){
         return formatter_percent.format(value/100);
     }
     else if(key==="s"){
-        return value
+        return value.replace("USDT", "")
     }
     else{
         return formatter.format(value)
@@ -167,17 +170,18 @@ function imageExists(image_url){
 
 }
 
+
 function new_row(element, symbol){
     let tr = create_element("tr")
 
     let name_logo = symbol.s.toLowerCase().replace("usdt", "")
-    if(imageExists(`./assets/symbols/${name_logo}.svg`)) {
-        add_child(tr, column_function["logo"](`./assets/symbols/${name_logo}.svg`))
+    // if(imageExists(`./assets/symbols/${name_logo}.svg`)) {
+        add_child(tr, column_function["logo"](name_logo))
         for (let key in symbol) {
             FILTER.includes(key) ? add_child(tr, column_function["data_fill"](toFormat(key, symbol[key]), "Block number", symbol.s + "-" + key)) : undefined
         }
         add_child(element, tr)
-    }
+    // }
 }
 
 function logo(image){
@@ -199,12 +203,13 @@ function logo(image){
                         "class": "symbol-label"
                     }
             },
-
             {
-                "type" : "img",
+                "type" : "i",
                 "properties" :
                     {
                         "src" : image,
+                        // "style": " font-size: 34px; filter:  brightness(0) invert(1);",
+                        "class":`cf cf-${image}`
                     }
             }
         ]
