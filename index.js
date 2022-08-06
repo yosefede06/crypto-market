@@ -124,7 +124,7 @@ function create_table() {
         },
         order: [[0, 'desc']],
         // sDom: 'i',
-        scrollY: '600px',
+        scrollY: '550px',
         scrollCollapse: true,
         paging: false,
     });
@@ -227,3 +227,9 @@ Array.from(document.getElementsByClassName("market-type")).forEach((value, ind) 
 
 
 generate_table()
+
+
+// document.getElementById("dark_icon").addEventListener("click",()=>{
+//     KTApp.setThemeMode('light');
+// })
+
