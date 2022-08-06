@@ -70,17 +70,6 @@ class Binance {
     }
 
     /**
-     * Print dedicated for general info
-     */
-    printGeneralInfo()
-    {
-        console.log(`Last Block: ${this.getLastBlock}`)
-        console.log(`Matic MarketCap on Polygon: ${this.getMarketCap}`)
-        console.log(`Number of blocks: ${this.getBlocks.length}`)
-        console.log("")
-    }
-
-    /**
      * Prints internal data of each block
      */
     printData()
@@ -125,7 +114,6 @@ class Binance {
             this.metadata = JSON.parse(response).data.filter(obj => obj.s.includes("USDT"))
             this.callback(this.metadata)
         }
-
     }
 
 

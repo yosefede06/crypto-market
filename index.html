@@ -35,8 +35,9 @@
 
             <!--begin::Toolbar-->
             <div class="toolbar mb-5 mb-lg-7" id="kt_toolbar">
+
                 <!--begin::Page title-->
-                <div class="page-title d-flex flex-column flex-xl-row align-items-xl-center me-3">
+                    <div class="page-title d-flex flex-column flex-xl-row align-items-xl-center">
                     <!--begin::Title-->
 <!--                    <div class="d-flex">-->
 <!--                        <h1 class="d-flex text-dark fw-bolder my-1 fs-3">Markets</h1>-->
@@ -50,7 +51,7 @@
 
                         <div class="d-flex justify-content-between col-12">
 
-                        <div style="z-index: 2;" class="fv-row me-3 me-xxl-0 flex-fill">
+                        <div style="z-index: 2;" class="fv-row flex-fill">
                             <div class="">
                                 <!--begin::Radio group-->
                                 <div class="btn-group w-100" data-kt-buttons="true" data-kt-buttons-target="[data-kt-button]">
@@ -59,14 +60,18 @@
                                         <!--begin::Input-->
                                         <input class="btn-check market-type" type="radio" name="method" value="4" />
                                         <!--end::Input-->
-                                        Spot Market</label>
+                                        <span class="d-none d-sm-block">Spot Market</span>
+                                        <span class="d-sm-none">Spot</span>
+                                        </label>
                                     <!--end::Radio-->
                                     <!--begin::Radio-->
                                     <label class="p-2 btn btn-sm btn-outline-secondary text-muted text-hover-dark text-active-dark btn-outline btn-active-light-secondary" data-kt-button="true">
                                         <!--begin::Input-->
                                         <input class="btn-check market-type" type="radio" name="method" checked="checked" value="5" />
                                         <!--end::Input-->
-                                        Futures Market</label>
+                                        <span class="d-none d-sm-block">Futures Market</span>
+                                        <span class="d-sm-none">Futures</span>
+                                        </label>
                                     <!--end::Radio-->
                                 </div>
                             </div>
@@ -82,9 +87,9 @@
                 </div>
                 <!--end::Page title-->
 
-                    <div class="d-flex justify-content-between col-2">
+                    <div class="d-flex justify-content-between ms-n6 col-2 col-sm-3 col-lg-2">
                         <!--begin::Row-->
-                        <div style="z-index: 2;" class="fv-row me-3 me-xxl-0 flex-fill">
+                        <div style="z-index: 2;" class="fv-row flex-fill">
                             <div class="">
                                 <!--begin::Radio group-->
                                 <div class="btn-group w-100" data-kt-buttons="true" data-kt-buttons-target="[data-kt-button]">
@@ -117,14 +122,23 @@
 
                         <!--end::Row-->
                     </div>
-                <div class="d-flex align-items-center py-2 py-md-1">
-                    <div class="me-3">
-                        <a class="me-lg-2 fw-bolder " data-bs-target="#kt_modal_view_users" data-bs-toggle="modal" data-kt-menu-placement="bottom-end" data-kt-menu-trigger="click" href="#" id="api-management"><!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
 
-                            <span class="text-dark d-none d-sm-inline-block">Connection</span>
-                        </a>
-                    </div>
-                    <span class="d-none d-sm-block">|</span>
+
+                    <div class="d-flex align-items-center py-2 py-md-1">
+                        <div class="me-4 me-lg-10">
+                            <div class="input-group">
+                                <button id="dropdown-exchanges-id" class="p-2 btn btn-outline-secondary text-muted text-hover-dark text-active-dark btn-active-light-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Binance</button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="#">Binance</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a onclick="f()" class="dropdown-item" href="#">Bybit</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#">Crypto.com</a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <span class="d-none d-sm-block">|</span>
                     <div class="ms-sm-5 me-3 me-lg-10">
 <!--                        <a class="fw-bolder" data-bs-target="#kt_modal_create_api_key" data-bs-toggle="modal" href="#" id="add-api">-->
 <!--                            <span class="text-dark d-none d-sm-inline-block">Check</span>-->
@@ -138,16 +152,14 @@
 
                         <!--end::Theme mode docs-->
 
-                </div>
+                    </div>
                 <!--end::Actions-->
             </div>
+
             <!--end::Toolbar-->
             <!--begin::Post-->
             <div class="content flex-column-fluid" id="kt_content">
                 <div id="visible-back-id">
-
-
-
                     <!--begin::Row-->
                     <div class="row g-5 g-xl-10 tab-pane">
                         <!--begin::Col-->
@@ -179,9 +191,11 @@
                                                     <thead>
                                                     <tr class="border-bottom-0">
                                                         <th class="p-0 w-50px" data-priority="1">Name</th>
-                                                        <th class="p-2 " data-priority="2"></th>
-                                                        <th class="p-2 " data-priority="3">Change</th>
-                                                        <th class="p-2 "  data-priority="4">Price</th>
+                                                        <th class="p-2 min-w-xl-150px" data-priority="2"></th>
+                                                        <th class="p-2 min-w-xl-150px" data-priority="3">Change</th>
+                                                        <th class="p-2"  data-priority="4">Price</th>
+                                                        <th class="p-2 w-150px"  data-priority="5"></th>
+
                                                     </tr>
                                                     </thead>
                                                     <!--end::Table head-->

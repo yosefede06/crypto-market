@@ -11,6 +11,8 @@ var formatter_percent = new Intl.NumberFormat('default', {
     maximumFractionDigits: 2,
 })
 
+let chart_metadata = {}
+
 function full_elements_order(element, metadata){
     for (let i = 0; i < metadata.length; i++) {
         element = add_child(element, full_element(metadata[i]["type"], metadata[i]["properties"]))
@@ -93,18 +95,21 @@ function generate_table() {
         if(!first_call) {
             metadata.forEach((symbol)=> {
                 update_row(symbol)
+
             })
+            // console.log(chart_metadata)
         }
         else{
             metadata.forEach((symbol)=> {
+                chart_metadata[symbol.s] = {data: [symbol.c]}
                 new_row(element, symbol)
+                init_chart(document.getElementById(`${symbol.s}-chart`), chart_metadata[symbol.s])
             })
             create_table()
         }
         first_call = false
     })
     instance.run()
-
 
 }
 
@@ -143,6 +148,25 @@ function toFormat(key, value){
 }
 
 function update_row(symbol){
+    if(symbol.s in chart_metadata){
+        chart_metadata[symbol.s]["data"].push(symbol.c)
+        chart_metadata[symbol.s]["chart"].updateSeries([{
+            data: chart_metadata[symbol.s]["data"]
+        }])
+        // set chart color
+        last_element = chart_metadata[symbol.s]["data"].at(-1)
+        before_last_element = chart_metadata[symbol.s]["data"].at(-2)
+        if(last_element > before_last_element){
+            chart_metadata[symbol.s]["chart"].updateOptions({
+                colors: [KTUtil.getCssVariableValue("--bs-success")]
+            })
+        }
+        else if(last_element < before_last_element){
+            chart_metadata[symbol.s]["chart"].updateOptions({
+                colors: [KTUtil.getCssVariableValue("--bs-danger")]
+            })
+        }
+    }
     for(let key in symbol){
         // 24H
         if(instance.ticker.includes("miniTicker") && key === "o"){
@@ -159,13 +183,30 @@ function new_row(element, symbol){
     let tr = create_element("tr")
 
     let name_logo = symbol.s.toLowerCase().replace("usdt", "")
-    // if(imageExists(`./assets/symbols/${name_logo}.svg`)) {
         add_child(tr, column_function["logo"](name_logo))
         for (let key in symbol) {
             FILTER.includes(key) ? add_child(tr, column_function["data_fill"](toFormat(key, symbol[key]), "Block number", symbol.s + "-" + key)) : undefined
         }
+        add_child(tr, chart_element(symbol.s))
         add_child(element, tr)
-    // }
+}
+
+function chart_element(id_val){
+    let td = create_element("td")
+    full_elements_order(td,
+        [
+            {
+                "type": "div",
+                "properties":
+                    {
+                        "id": `${id_val}-chart`,
+                        "class": "me-10 mt-n7 min-h-auto",
+                        "style": "width: 150px; height: 80px",
+                    }
+            }
+            ]
+    )
+    return td;
 }
 
 function logo(image){
@@ -254,3 +295,122 @@ function dark_listener() {
     }
 }
 
+
+function f() {
+    document.getElementById('dropdown-exchanges-id').innerHTML = 'Bybit'
+}
+
+function init_chart(id, data) {
+        var a = parseInt(KTUtil.css(id, "height")),
+            t = KTUtil.getCssVariableValue("--bs-gray-500"),
+            l = KTUtil.getCssVariableValue("--bs-border-dashed-color"),
+            o = KTUtil.getCssVariableValue("--bs-gray-400"),
+            r = KTUtil.getCssVariableValue("--bs-success"),
+            dang = KTUtil.getCssVariableValue("--bs-danger"),
+            i = id.getAttribute("data-kt-chart-info")
+            data["chart"] = new ApexCharts(id, {
+                options: {
+                    responsive: true,
+                },
+                series: [{
+                    data: data["data"]
+                }],
+                chart: {
+                    fontFamily: "inherit",
+                    type: "area",
+
+                    height: a,
+                    toolbar: {
+                        show: !1
+                    }
+                },
+                plotOptions: {
+                    area: {
+                        fillTo: 'end'
+                    }
+                },
+                legend: {
+                    show: !1
+                },
+                dataLabels: {
+                    enabled: !1
+                },
+                fill: {
+                    type: "gradient",
+                    gradient: {
+                        shadeIntensity: 0.2,
+                        opacityFrom: .6,
+                        // shadeIntensity: 1,
+                        // opacityFrom: .4,
+                        opacityTo: 0.20,
+                        stops: [0, 80, 100],
+                    }
+                },
+                stroke: {
+                    curve: "smooth",
+                    show: !0,
+                    width: 2,
+                    colors: [o]
+                },
+                tooltip: {
+                    enabled: false
+
+                },
+                xaxis: {
+                    axisBorder: {
+                        show: !1
+                    },
+                    axisTicks: {
+                        show: !1
+                    },
+                    labels: {
+                        show: !1
+                    },
+                },
+                yaxis: {
+                    labels: {
+                        show: !1
+                    }
+                },
+                states: {
+                    normal: {
+                        filter: {
+                            type: "none",
+                            value: 0
+                        }
+                    },
+                    hover: {
+                        filter: {
+                            type: "none",
+                            value: 0
+                        }
+                    },
+                    active: {
+                        allowMultipleDataPointsSelection: !1,
+                        filter: {
+                            type: "none",
+                            value: 0
+                        }
+                    }
+                },
+                colors: [r],
+                grid: {
+                    borderColor: l,
+                    strokeDashArray: 0,
+                    yaxis: {
+                        lines: {
+                            show: !1
+                        }
+                    }
+                },
+                markers: {
+                    strokeColor: o,
+                    strokeWidth: 3
+                }
+            });
+
+        setTimeout((function () {
+            data["chart"].render()
+        }), 0)
+}
+// Chart.defaults.global.tooltips.enabled = false;
