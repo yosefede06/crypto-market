@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--begin::Head-->
+<head>
+    <title>Protocol between web browser (https://polygonscan.com) and their internal webServer.</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="The most advanced Automated Trading Platform based on a cryptocurrency trading bot that runs in cloud an automated program that executes buy and sell orders &amp; with no manual input when specific, pre-defined market conditions are met." />
+    <meta name="keywords" content="bot easy, crypto, cryptocurrency, crypto trading bot, trading bot, cryptocurrency trading bot, automated trading" >
+    <!--		<meta name="viewport" content="width=device-width, initial-scale=1" />-->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="bot easy - Automated Trade Bots &amp; for crypto exchanges" />
+    <meta property="og:url" content="https://bot-easy.com" />
+    <meta property="og:site_name" content="Dashboard | bot easy" />
+    <link rel="canonical" href="https://bot-easy.com" />
+    <!--begin::Fonts-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+    <!--end::Fonts-->
+    <!--begin::Page Vendor Stylesheets(used by this page)-->
+    <link href="assets/plugins/custom/datatables/datatables.dark.bundle.css" rel="stylesheet" type="text/css">
+    <link href="assets/plugins/global/plugins.dark.bundle.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/style.dark.bundle.css" rel="stylesheet" type="text/css">
+</head>
+<!--end::Head-->
+<!--begin::Body-->
+<body id="kt_body" class="dark-mode header-fixed header-tablet-and-mobile-fixed">
+
+<!--begin::Root-->
+<div class="d-flex flex-column flex-root">
+    <!--begin::Page-->
+    <div class="mt-10 page d-flex flex-row flex-column-fluid">
+        <!--begin::Container-->
+        <div class="d-flex flex-column flex-column-fluid container-fluid">
+            <!--begin::Toolbar-->
+            <div class="toolbar mb-5 mb-lg-7" id="kt_toolbar">
+                <!--begin::Page title-->
+                <div class="page-title d-flex flex-column flex-xl-row align-items-xl-center me-3">
+                    <!--begin::Title-->
+<!--                    <div class="d-flex">-->
+<!--                        <h1 class="d-flex text-dark fw-bolder my-1 fs-3">Markets</h1>-->
+
+
+
+
+<!--                    </div>-->
+<!--                    <span class="d-none d-xl-block mx-4">•</span>-->
+                    <div class="d-flex">
+                        <div class="d-flex justify-content-between col-12">
+                        <div style="z-index: 2;" class="fv-row me-3 me-xxl-0 flex-fill">
+                            <div class="">
+                                <!--begin::Radio group-->
+                                <div class="btn-group w-100" data-kt-buttons="true" data-kt-buttons-target="[data-kt-button]">
+                                    <!--begin::Radio-->
+                                    <label class="p-2 btn btn-sm btn-outline-secondary text-muted text-hover-dark text-active-dark btn-outline btn-active-light active" data-kt-button="true">
+                                        <!--begin::Input-->
+                                        <input class="btn-check market-type" type="radio" name="method" value="4" />
+                                        <!--end::Input-->
+                                        Spot Market</label>
+                                    <!--end::Radio-->
+                                    <!--begin::Radio-->
+                                    <label class="p-2 btn btn-sm btn-outline-secondary text-muted text-hover-dark text-active-dark btn-outline btn-active-light" data-kt-button="true">
+                                        <!--begin::Input-->
+                                        <input class="btn-check market-type" type="radio" name="method" checked="checked" value="5" />
+                                        <!--end::Input-->
+                                        Futures Market</label>
+                                    <!--end::Radio-->
+                                </div>
+                            </div>
+                            <!--end::Radio group-->
+                        </div>
+                            </div>
+                    </div>
+
+
+
+
+                    <!--end::Title-->
+                </div>
+                <!--end::Page title-->
+
+                    <div class="d-flex justify-content-between col-4">
+                        <!--begin::Row-->
+                        <div style="z-index: 2;" class="fv-row me-3 me-xxl-0 flex-fill">
+                            <div class="">
+                                <!--begin::Radio group-->
+                                <div class="btn-group w-100" data-kt-buttons="true" data-kt-buttons-target="[data-kt-button]">
+                                    <!--begin::Radio-->
+                                    <label class="p-2 btn btn-sm btn-outline-secondary text-muted text-hover-dark text-active-dark btn-outline btn-active-light active" data-kt-button="true">
+                                        <!--begin::Input-->
+                                        <input class="btn-check ticker-class" type="radio" name="method" value="1" />
+                                        <!--end::Input-->
+                                        1H</label>
+                                    <!--end::Radio-->
+                                    <!--begin::Radio-->
+                                    <label class="p-2 btn btn-sm btn-outline-secondary text-muted text-hover-dark text-active-dark btn-outline btn-active-light" data-kt-button="true">
+                                        <!--begin::Input-->
+                                        <input class="btn-check ticker-class" type="radio" name="method" checked="checked" value="2" />
+                                        <!--end::Input-->
+                                        4h</label>
+                                    <!--end::Radio-->
+                                    <!--begin::Radio-->
+                                    <label class="p-2 btn btn-sm btn-outline-secondary text-muted text-hover-dark text-active-dark btn-outline btn-active-light" data-kt-button="true">
+                                        <!--begin::Input-->
+                                        <input class="btn-check ticker-class" type="radio" name="method" value="3" />
+                                        <!--end::Input-->
+                                        24H</label>
+                                    <!--end::Radio-->
+                                </div>
+                            </div>
+                            <!--end::Radio group-->
+                        </div>
+
+                        <!--end::Row-->
+                    </div>
+                <div class="d-flex align-items-center py-2 py-md-1">
+                    <div class="me-3">
+                        <a class="me-lg-2 fw-bolder " data-bs-target="#kt_modal_view_users" data-bs-toggle="modal" data-kt-menu-placement="bottom-end" data-kt-menu-trigger="click" href="#" id="api-management"><!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
+
+                            <span class="text-dark d-none d-sm-inline-block">Connection</span>
+                        </a>
+                    </div>
+                    <span class="d-none d-sm-block">|</span>
+                    <div class="ms-sm-5 me-3 me-lg-10">
+                        <a class="fw-bolder" data-bs-target="#kt_modal_create_api_key" data-bs-toggle="modal" href="#" id="add-api">
+                            <span class="text-dark d-none d-sm-inline-block">Check</span>
+                        </a>
+                    </div>
+                </div>
+                <!--end::Actions-->
+            </div>
+            <!--end::Toolbar-->
+            <!--begin::Post-->
+            <div class="content flex-column-fluid" id="kt_content">
+                <div id="visible-back-id">
+
+
+
+                    <!--begin::Row-->
+                    <div class="row g-5 g-xl-10 tab-pane">
+                        <!--begin::Col-->
+                        <div class="col-xxl-12">
+                            <!--begin::Tables widget 7-->
+                            <div class="card card-flush h-xl-100">
+                                <div class="card-header pt-7">
+                                    <!--begin::Title-->
+                                    <h4 class="card-title align-items-start flex-column">
+                                        <span class="card-label fw-bolder text-gray-800"><span id="orders-number"></span><span id="info-text-total" > Last blocks</span></span>
+
+                                    </h4>
+                                </div>
+                                <!--begin::Body-->
+                                <div class="card-body py-3 ">
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade active show">
+
+                                            <!--begin::Table container-->
+
+
+                                            <div class="table-responsive">
+
+                                                <!--begin::Table-->
+
+                                                <table id="performance-id" class="table table-row-dashed align-middle gs-0 gy-4 my-0">
+
+                                                    <!--begin::Table head-->
+                                                    <thead>
+                                                    <tr class="border-bottom-0">
+                                                        <th class="p-0 w-50px" data-priority="1">Name</th>
+                                                        <th class="p-2 min-w-50px" data-priority="2"></th>
+                                                        <th class="p-2 " data-priority="3">Change</th>
+                                                        <th class="p-2 "  data-priority="4">Price</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <!--end::Table head-->
+                                                    <!--begin::Table body-->
+                                                    <tbody id="tbody-activity"></tbody>
+
+
+                                                    <!--end::Table body-->
+                                                </table>
+                                                <!--end::Table-->
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="dt-more-container">
+                                                    <button id="btn-example-load-more" class="btn btn-sm btn-outline-primary" style="display:none">Load More</button>
+                                                </div>
+                                            </div>
+
+                                            <!--end::Table container-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--begin::Body-->
+
+
+                            </div>
+
+                            <!--end::Tables widget 7-->
+                        </div>
+
+
+
+                        <!--end::Col-->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Page-->
+</div>
+<!--end::Root-->
+
+<!--begin::Javascript-->
+
+<!--begin::Global Javascript Bundle(used by all pages)-->
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+<script src="assets/js/scripts.bundle.js"></script>
+<script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
+<script src="main.js"></script>
+<script src="index.js"></script>
+
+<!--end::Page Custom Javascript-->
+<!--end::Javascript-->
+</body>
+<!--end::Body-->
+</html>
