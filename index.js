@@ -201,7 +201,7 @@ function chart_element(id_val){
                     {
                         "id": `${id_val}-chart`,
                         "class": "mt-n7 min-h-auto",
-                        "style": `width: ${window.innerWidth * 0.1 + 70}px; height: 80px`,
+                        "style": `width: ${window.innerWidth * 0.1 + 60}px; height: 80px`,
                     }
             }
             ]
