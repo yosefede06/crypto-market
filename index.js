@@ -208,7 +208,7 @@ function logo(image){
                 "properties" :
                     {
                         "src" : image,
-                        // "style": " font-size: 34px; filter:  brightness(0) invert(1);",
+                        "style": " font-size: 34px; filter:  brightness(0) invert(1);",
                         "class":`cf cf-${image}`
                     }
             }
