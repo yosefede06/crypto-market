@@ -226,21 +226,22 @@ function set_logo_color(){
 }
 
 function check_dark_mode(){
-    return !localStorage.getItem("light-mode")
+    return localStorage.getItem("dark-mode")
 }
 
 function set_light_mode(){
     KTApp.setThemeMode('light');
     $(".dark-image-class").css("filter", "brightness(0)")
     $("#dark_icon").attr("class", "fonticon-moon fs-2 text-dark")
-    localStorage.setItem("light-mode", "true")
+    localStorage.removeItem("dark-mode")
 }
 
 function set_dark_mode(){
     KTApp.setThemeMode('dark');
     $(".dark-image-class").css("filter", "brightness(0) invert(1)")
     $("#dark_icon").attr("class", "fonticon-sun fs-2")
-    localStorage.removeItem("light-mode")
+    localStorage.setItem("dark-mode", "true")
+
 }
 
 function toggle_dark(change) {
