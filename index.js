@@ -238,7 +238,7 @@ function new_row(element, symbol){
 }
 
 function down_text(symbol, key){
-    return key === 'c' && window.innerWidth <= 488
+    return key === 'c' && window.innerWidth <= 479
 }
 
 function chart_element(id_val){
@@ -251,7 +251,7 @@ function chart_element(id_val){
                     {
                         "id": `${id_val}-chart`,
                         "class": "mt-n7 min-h-auto",
-                        "style": `width: ${window.innerWidth * 0.1 + 60}px; height: 80px`,
+                        "style": `width: ${window.innerWidth * 0.1 + 25}px; height: 80px`,
                     }
             }
             ]
@@ -420,6 +420,7 @@ function init_chart(id, data) {
                     },
                 },
                 yaxis: {
+                    show: false,
                     labels: {
                         show: !1
                     }
@@ -447,6 +448,10 @@ function init_chart(id, data) {
                 },
                 colors: [r],
                 grid: {
+                    padding: {
+                        left: 5,
+                        right: 0
+                    },
                     borderColor: l,
                     strokeDashArray: 0,
                     yaxis: {
