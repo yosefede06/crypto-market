@@ -22,11 +22,13 @@
     <link href="assets/plugins/custom/datatables/datatables.dark.bundle.css" rel="stylesheet" type="text/css">
     <link href="assets/plugins/global/plugins.dark.bundle.css" rel="stylesheet" type="text/css">
     <link href="assets/css/style.dark.bundle.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/costum.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdn.cryptofonts.com/1.4.0/cryptofont.css">
 </head>
 <!--end::Head-->
 <!--begin::Body-->
 <body id="kt_body" class="dark-mode header-fixed header-tablet-and-mobile-fixed">
+<div class="page-loader flex-column"></div>
 <!--begin::Root-->
 <div class="d-flex flex-column flex-root">
     <!--begin::Page-->
@@ -80,8 +82,6 @@
                         </div>
                             </div>
                     </div>
-
-
 
 
                     <!--end::Title-->
@@ -157,6 +157,9 @@
                 <!--end::Actions-->
             </div>
 
+
+
+
             <!--end::Toolbar-->
             <!--begin::Post-->
             <div class="content flex-column-fluid" id="kt_content">
@@ -184,9 +187,11 @@
 
                                             <div class="table-responsive">
 
+
                                                 <!--begin::Table-->
 
                                                 <table id="performance-id" class="table table-row-dashed align-middle gs-0 gy-4 my-0">
+
 
                                                     <!--begin::Table head-->
                                                     <thead>
@@ -201,7 +206,10 @@
                                                     </thead>
                                                     <!--end::Table head-->
                                                     <!--begin::Table body-->
-                                                    <tbody id="tbody-activity"></tbody>
+                                                    <tbody id="tbody-activity">
+
+                                                    </tbody>
+
 
 
                                                     <!--end::Table body-->
@@ -209,16 +217,22 @@
                                                 <!--end::Table-->
 
                                             </div>
+
                                             <div class="row">
+
                                                 <div class="dt-more-container">
                                                     <button id="btn-example-load-more" class="btn btn-sm btn-outline-primary" style="display:none">Load More</button>
                                                 </div>
                                             </div>
 
+
                                             <!--end::Table container-->
                                         </div>
+
                                     </div>
+
                                 </div>
+
                                 <!--begin::Body-->
 
 
@@ -226,13 +240,19 @@
 
                             <!--end::Tables widget 7-->
                         </div>
+                        <span id="loader-id" style="margin: auto; margin-top:200px" class="loader"></span>
 
 
 
                         <!--end::Col-->
                     </div>
+
                 </div>
+
             </div>
+
+
+
 
         </div>
         <!--end::Container-->

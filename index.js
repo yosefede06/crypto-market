@@ -1,3 +1,5 @@
+
+
 /**
  * For platforms/browsers not supporting at method
  * @param n
@@ -175,6 +177,7 @@ function create_table() {
         paging: false,
     });
     table_loaded = true
+    $("#loader-id").css("display", "none")
     return false
 }
 function toFormat(key, value){
