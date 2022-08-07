@@ -449,6 +449,8 @@ function init_chart(id, data) {
                 colors: [r],
                 grid: {
                     padding: {
+                        top:0,
+                        bottom:0,
                         left: 5,
                         right: 0
                     },
