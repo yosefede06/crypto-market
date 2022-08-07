@@ -65,7 +65,7 @@ function full_element(type, properties){
     return element
 }
 
-function data_fill_column(price, title, class_name){
+function data_fill_column(price, title, class_name, down_value){
     let txt = "fw-bolder d-block fs-6 " + class_name
     let td = create_element("td")
     full_elements_inline(td,
@@ -83,13 +83,31 @@ function data_fill_column(price, title, class_name){
                 "type": "span",
                 "properties":
                     {
-                        "class" : "text-gray-400 fw-bold d-block fs-7"
+                        "class" : "text-gray-400 fw-bold d-block fs-7 " + set_down_class_text(title, class_name)
                     },
-                "text" : "Binance"
+                "text" : `${set_down_text(title, down_value)}`
             },
         ]
     )
     return td;
+}
+
+function set_down_text(title, down_value){
+    if(title){
+        return down_value
+    }
+    else{
+        return "Binance"
+    }
+}
+
+function set_down_class_text(title, class_name){
+    if(title){
+        return class_name.substring(0, class_name.length - 1) + "P";
+    }
+    else{
+        return ""
+    }
 }
 
 function create_element(type){
@@ -148,9 +166,7 @@ function update_header(inBlock){
 function create_table() {
     table = $("#performance-id").DataTable({
         responsive: {
-            details: {
-                type: 'inline'
-            }
+            details: false
         },
         order: [[0, 'desc']],
         // sDom: 'i',
@@ -215,10 +231,14 @@ function new_row(element, symbol){
     let name_logo = symbol.s.toLowerCase().replace("usdt", "")
         add_child(tr, column_function["logo"](name_logo))
         for (let key in symbol) {
-            FILTER.includes(key) ? add_child(tr, column_function["data_fill"](toFormat(key, symbol[key]), "Block number", symbol.s + "-" + key)) : undefined
+            FILTER.includes(key) ? add_child(tr, column_function["data_fill"](toFormat(key, symbol[key]), down_text(symbol, key), symbol.s + "-" + key, toFormat("P", symbol.P))) : undefined
         }
         add_child(tr, chart_element(symbol.s))
         add_child(element, tr)
+}
+
+function down_text(symbol, key){
+    return key === 'c' && window.innerWidth <= 488
 }
 
 function chart_element(id_val){
