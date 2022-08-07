@@ -1,3 +1,30 @@
+/**
+ * For platforms/browsers not supporting at method
+ * @param n
+ * @returns {undefined|*}
+ */
+function at(n) {
+    // ToInteger() abstract op
+    n = Math.trunc(n) || 0;
+    // Allow negative indexing from the end
+    if (n < 0) n += this.length;
+    // OOB access is guaranteed to return undefined
+    if (n < 0 || n >= this.length) return undefined;
+    // Otherwise, this is just normal property access
+    return this[n];
+}
+
+const TypedArray = Reflect.getPrototypeOf(Int8Array);
+for (const C of [Array, String, TypedArray]) {
+    Object.defineProperty(C.prototype, "at",
+        { value: at,
+            writable: true,
+            enumerable: false,
+            configurable: true });
+}
+
+
+
 let table_loaded = false
 const FILTER = ['P', 'c', 's']
 
@@ -154,17 +181,20 @@ function update_row(symbol){
             data: chart_metadata[symbol.s]["data"]
         }])
         // set chart color
-        last_element = chart_metadata[symbol.s]["data"].at(-1)
-        before_last_element = chart_metadata[symbol.s]["data"].at(-2)
-        if(last_element > before_last_element){
-            chart_metadata[symbol.s]["chart"].updateOptions({
-                colors: [KTUtil.getCssVariableValue("--bs-success")]
-            })
-        }
-        else if(last_element < before_last_element){
-            chart_metadata[symbol.s]["chart"].updateOptions({
-                colors: [KTUtil.getCssVariableValue("--bs-danger")]
-            })
+        // min of two values to start setting color properties
+        if(chart_metadata[symbol.s]["data"].length >= 2) {
+            last_element = chart_metadata[symbol.s]["data"].at(-1)
+            before_last_element = chart_metadata[symbol.s]["data"].at(-2)
+            if (last_element > before_last_element) {
+                chart_metadata[symbol.s]["chart"].updateOptions({
+                    colors: [KTUtil.getCssVariableValue("--bs-success")]
+                })
+            }
+            else if (last_element < before_last_element) {
+                chart_metadata[symbol.s]["chart"].updateOptions({
+                    colors: [KTUtil.getCssVariableValue("--bs-danger")]
+                })
+            }
         }
     }
     for(let key in symbol){
