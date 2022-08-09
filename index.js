@@ -322,6 +322,7 @@ function toFormat(key, value, decimals=2, price = 1){
 function update_row(symbol){
     if(symbol.s in chart_metadata){
         chart_metadata[symbol.s]["data"].push(symbol.c)
+        // chart_metadata[symbol.s]["data"].length >= 25 ? chart_metadata[symbol.s]["data"].shift() : undefined
         chart_metadata[symbol.s]["chart"].updateSeries([{
             data: chart_metadata[symbol.s]["data"]
         }])
