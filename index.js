@@ -285,6 +285,7 @@ function create_table() {
         // sDom: 'i',
         scrollY: `${(window.innerHeight * 0.61).toString()}px`,
         scrollCollapse: true,
+        "bInfo" : false,
         paging: false,
     });
     table_loaded = true
@@ -571,4 +572,9 @@ function init_chart(id, data) {
             data["chart"].render()
         }), 0)
 }
-// Chart.defaults.global.tooltips.enabled = false;
+
+document.getElementById('datatable-search-input').addEventListener('input', (e) => {
+
+    table_loaded ? table.search(e.target.value, true, false).draw() : undefined
+});
+

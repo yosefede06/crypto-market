@@ -9,7 +9,7 @@ const ticker = {
 }
 /**
  * A program that retrieves data from a websocket endpoint in realtime,
- * as it appears on the official Polygon PoS Chain Explorer: https://polygonscan.com
+ * as it appears on the official Binance website Markets: https://www.binance.com/en/markets
  */
 class Binance {
     /**
@@ -18,10 +18,12 @@ class Binance {
      * @param print
      * @param callback
      * @param message
+     * @param _disconnectCallback
      */
-    constructor(endpoint, print= 1, callback = this.printData, message = BinanceMessage) {
+    constructor(endpoint, print= 1, callback = this.printData, message = BinanceMessage, _disconnectCallback = this.reconnect) {
         this.callback = callback
         this.print = print
+        this.endpoint = endpoint
         this.ticker = ticker[1]
         this.sendMessage = message
         this.ws = new WebSocket(endpoint);
@@ -30,7 +32,11 @@ class Binance {
         this.block = 0
         this.info = undefined
         this.blocks = undefined
+        this._disconnectCallback = _disconnectCallback
         this.txns = undefined
+        this.connected = false
+        this.connections = []
+        this.requests = 0
     }
 
     /**
@@ -74,9 +80,11 @@ class Binance {
      */
     printData()
     {
-        this.getBlocks.forEach((inBlock)=>{
-            console.log(`Block: ${inBlock.b_no}. Minner: ${inBlock.b_miner}`)
-        })
+    }
+
+    reconnect(){
+        this.ws = new WebSocket(this.endpoint)
+        this.run()
     }
 
     /**
@@ -86,7 +94,17 @@ class Binance {
     subscribe (event)
     {
         this.ws.onopen = (response=> {
+            this.connected = true
             this.ws.send(event)
+        })
+        this.ws.onclose = (response=> {
+            this.connected = false
+            if(this.connections.length === 0) {
+                this.connections.push(setInterval(() => {
+                    console.log("reconnection")
+                    this.connected ? clearInterval(this.connections.pop()) : this._disconnectCallback()
+                }, 3000))
+            }
         })
         this.ws.onmessage = (response => {
             !this.requestNumber ? this.saveConnection(response.data) : this.retrieveData(response.data)
@@ -110,7 +128,8 @@ class Binance {
     retrieveData(response)
     {
         if(this.ticker === JSON.parse(response).stream) {
-            console.log(this.metadata)
+            this.requests++
+            console.log(`request n.${this.requests}`)
             this.metadata = JSON.parse(response).data.filter(obj => obj.s.includes("USDT"))
             this.callback(this.metadata)
         }
