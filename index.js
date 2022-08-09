@@ -1,4 +1,55 @@
+Number.prototype.countDecimals = function () {
 
+    if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+
+    var str = this.toString();
+    if (str.indexOf(".") !== -1 && str.indexOf("-") !== -1) {
+        return str.split("-")[1] || 0;
+    } else if (str.indexOf(".") !== -1) {
+        return str.split(".")[1].length || 0;
+    }
+    return str.split("-")[1] || 0;
+}
+
+function set_logo_color(){
+    return check_dark_mode() ? "brightness(0) invert(1)" : "brightness(0)"
+}
+
+function check_dark_mode(){
+    return localStorage.getItem("dark-mode")
+}
+
+function set_light_mode(){
+    KTApp.setThemeMode('light');
+    $(".dark-image-class").css("filter", "brightness(0)")
+    $("#dark_icon").attr("class", "fonticon-moon fs-2 text-dark")
+    $("#header-top-color").attr("content", "#f4f6f9")
+    localStorage.removeItem("dark-mode")
+}
+
+function set_dark_mode(){
+    KTApp.setThemeMode('dark');
+    $(".dark-image-class").css("filter", "brightness(0) invert(1)")
+    $("#dark_icon").attr("class", "fonticon-sun fs-2")
+    $("#header-top-color").attr("content", "#151521")
+    localStorage.setItem("dark-mode", "true")
+
+}
+
+function toggle_dark(change) {
+    change ? (check_dark_mode() ? set_light_mode() : set_dark_mode()) : (check_dark_mode() ? set_dark_mode() : set_light_mode())
+}
+toggle_dark(false)
+function dark_listener() {
+    if (table_loaded) {
+        toggle_dark(true)
+    }
+}
+
+
+function f() {
+    document.getElementById('dropdown-exchanges-id').innerHTML = 'Bybit'
+}
 
 /**
  * For platforms/browsers not supporting at method
@@ -28,7 +79,7 @@ for (const C of [Array, String, TypedArray]) {
 
 
 let table_loaded = false
-const FILTER = ['P', 'c', 's']
+const FILTER = ['P', 'c', 's', 'mark']
 
 var formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -67,11 +118,19 @@ function full_element(type, properties){
     return element
 }
 
-function data_fill_column(price, title, class_name, down_value){
+function data_fill_column(price, title, class_name, down_value, position, name){
     let txt = "fw-bolder d-block fs-6 " + class_name
     let td = create_element("td")
     full_elements_inline(td,
         [
+            {
+                "type": "span",
+                "properties":
+                    {
+                        "style" : "display:none"
+                    },
+                "text" : position
+            },
             {
                 "type": "span",
                 "properties":
@@ -87,19 +146,19 @@ function data_fill_column(price, title, class_name, down_value){
                     {
                         "class" : "text-gray-400 fw-bold d-block fs-7 " + set_down_class_text(title, class_name)
                     },
-                "text" : `${set_down_text(title, down_value)}`
+                "text" : `${set_down_text(title, down_value, name)}`
             },
         ]
     )
     return td;
 }
 
-function set_down_text(title, down_value){
+function set_down_text(title, down_value, name){
     if(title){
         return down_value
     }
     else{
-        return "Binance"
+        return name
     }
 }
 
@@ -134,30 +193,82 @@ const column_function = {
     "data_fill" : data_fill_column,
     "logo" : logo,
 }
+let decimalsMap = {}
+let totalSupplyMap = {}
 var table = undefined
 let first_call = true
 let instance = undefined
+let lst_sort = []
 function generate_table() {
     instance = new Binance(binanceWebSocket, 1, (metadata)=>{
         if(!first_call) {
             metadata.forEach((symbol)=> {
                 update_row(symbol)
-
+                $(`.${symbol.s}-mark`).html(toFormat("mark", totalSupplyMap[symbol.s], decimalsMap[symbol.s], parseFloat(symbol.c)))
             })
             // console.log(chart_metadata)
         }
         else{
-            metadata.forEach((symbol)=> {
-                chart_metadata[symbol.s] = {data: [symbol.c]}
-                new_row(element, symbol)
-                init_chart(document.getElementById(`${symbol.s}-chart`), chart_metadata[symbol.s])
-            })
-            create_table()
+            fetch('https://www.binance.com/bapi/composite/v1/public/marketing/symbol/list')
+                .then(res => res.json())
+                .then(res=> {
+                        let ind = 0
+                        getTopCoins(res.data, 100, (data)=>{
+                            generateDatainTable(data)
+                    })
+                    }
+                )
+            // metadata.forEach((symbol)=> {
+            //     chart_metadata[symbol.s] = {data: [symbol.c]}
+            //     new_row(element, symbol)
+            //     init_chart(document.getElementById(`${symbol.s}-chart`), chart_metadata[symbol.s])
+            // })
+            // create_table()
         }
         first_call = false
     })
     instance.run()
 
+}
+
+function generateDatainTable(data){
+    data.forEach(val=>{
+            chart_metadata[`${val["name"]}USDT`] = {data: [val["price"]]}
+            decimalsMap[`${val["name"]}USDT`] = Math.min(7, val["price"].countDecimals())
+            totalSupplyMap[`${val["name"]}USDT`] = val["circulatingSupply"] ? val["circulatingSupply"] : 0
+            new_row(element, {
+                'name': val["fullName"],
+                's': `${val["name"]}USDT`,
+                'P': val["dayChange"],
+                'c': val["price"],
+                'mark': val["circulatingSupply"] ? val["circulatingSupply"] : 0,
+                'decimals': Math.min(5, val["price"].countDecimals()),
+                "rank": val["rank"] ? orderFormat(val["rank"]) : "999"
+            })
+            init_chart(document.getElementById(`${val["name"]}USDT-chart`), chart_metadata[`${val["name"]}USDT`])
+            // console.log("name: " + val["name"] + "  " + "fullname: " + val["fullName"] + "  " + "price: " + val["price"])
+    })
+    create_table()
+}
+
+function getTopCoins(data, top_val, _callback){
+    let sorted_array = data.sort((a,b)=>a["rank"] - b["rank"])
+    // sorted_array.forEach((val, ind)=>{
+    //     sorted_array[ind]["rank"] = ind+1
+    // })
+    _callback(sorted_array.slice(0, top_val))
+}
+
+function orderFormat(val){
+    if(val.toString().length <= 1){
+        return `00${val}`
+    }
+    else if(val.toString().length <= 2){
+        return `0${val}`
+    }
+    else{
+        return `${val}`
+    }
 }
 
 function update_header(inBlock){
@@ -170,7 +281,7 @@ function create_table() {
         responsive: {
             details: false
         },
-        order: [[0, 'desc']],
+        order: [[1, 'asc']],
         // sDom: 'i',
         scrollY: `${(window.innerHeight * 0.61).toString()}px`,
         scrollCollapse: true,
@@ -180,15 +291,29 @@ function create_table() {
     $("#loader-id").css("display", "none")
     return false
 }
-function toFormat(key, value){
+function toFormat(key, value, decimals=2, price = 1){
     if(key==="P"){
         return formatter_percent.format(value/100);
+    }
+    else if(key === "mark"){
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            notation: 'compact',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(price * value);
     }
     else if(key==="s"){
         return value.replace("USDT", "")
     }
     else{
-        return formatter.format(value)
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals
+        }).format(value);
     }
 
 }
@@ -223,7 +348,7 @@ function update_row(symbol){
             $(`.${symbol.s}-P`).html(formatter_percent.format(((parseFloat(symbol.c)/parseFloat(symbol.o)) - 1)))
         }
         else {
-            FILTER.includes(key) ? $(`.${symbol.s}-${key}`).html(toFormat(key, symbol[key])) : undefined
+            FILTER.includes(key) ? $(`.${symbol.s}-${key}`).html(toFormat(key, symbol[key], decimalsMap[symbol.s])) : undefined
         }
     }
 }
@@ -234,10 +359,20 @@ function new_row(element, symbol){
     let name_logo = symbol.s.toLowerCase().replace("usdt", "")
         add_child(tr, column_function["logo"](name_logo))
         for (let key in symbol) {
-            FILTER.includes(key) ? add_child(tr, column_function["data_fill"](toFormat(key, symbol[key]), down_text(symbol, key), symbol.s + "-" + key, toFormat("P", symbol.P))) : undefined
+            FILTER.includes(key) ? add_child(tr, column_function["data_fill"](toFormat(key, symbol[key], symbol["decimals"], symbol.c), down_text(symbol, key), symbol.s + "-" + key, toFormat("P", symbol.P, symbol["decimals"]), symbol["rank"], full_name(symbol, key))) : undefined
         }
         add_child(tr, chart_element(symbol.s))
         add_child(element, tr)
+}
+
+function full_name(symbol, key){
+    if(key === "s"){
+        return symbol["name"].substring(0,11)
+    }
+    else{
+        return "Binance"
+    }
+
 }
 
 function down_text(symbol, key){
@@ -315,45 +450,6 @@ Array.from(document.getElementsByClassName("market-type")).forEach((value, ind) 
 
 generate_table()
 
-function set_logo_color(){
-    return check_dark_mode() ? "brightness(0) invert(1)" : "brightness(0)"
-}
-
-function check_dark_mode(){
-    return localStorage.getItem("dark-mode")
-}
-
-function set_light_mode(){
-    KTApp.setThemeMode('light');
-    $(".dark-image-class").css("filter", "brightness(0)")
-    $("#dark_icon").attr("class", "fonticon-moon fs-2 text-dark")
-    $("#header-top-color").attr("content", "#f4f6f9")
-    localStorage.removeItem("dark-mode")
-}
-
-function set_dark_mode(){
-    KTApp.setThemeMode('dark');
-    $(".dark-image-class").css("filter", "brightness(0) invert(1)")
-    $("#dark_icon").attr("class", "fonticon-sun fs-2")
-    $("#header-top-color").attr("content", "#151521")
-    localStorage.setItem("dark-mode", "true")
-
-}
-
-function toggle_dark(change) {
-    change ? (check_dark_mode() ? set_light_mode() : set_dark_mode()) : (check_dark_mode() ? set_dark_mode() : set_light_mode())
-}
-toggle_dark(false)
-function dark_listener() {
-    if (table_loaded) {
-        toggle_dark(true)
-    }
-}
-
-
-function f() {
-    document.getElementById('dropdown-exchanges-id').innerHTML = 'Bybit'
-}
 
 function init_chart(id, data) {
         var a = parseInt(KTUtil.css(id, "height")),
