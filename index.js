@@ -320,7 +320,8 @@ function toFormat(key, value, decimals=2, price = 1){
 }
 
 function update_row(symbol){
-    if(symbol.s in chart_metadata){
+    if(symbol.s in chart_metadata)
+    {
         chart_metadata[symbol.s]["data"].push(symbol.c)
         // chart_metadata[symbol.s]["data"].length >= 25 ? chart_metadata[symbol.s]["data"].shift() : undefined
         chart_metadata[symbol.s]["chart"].updateSeries([{
@@ -391,7 +392,7 @@ function chart_element(id_val){
                     {
                         "id": `${id_val}-chart`,
                         "class": "mt-n7 min-h-auto",
-                        "style": `width: ${window.innerWidth * 0.1 + 25}px; height: 80px`,
+                        "style": `width: ${window.innerWidth * 0.06 + 40}px; height: 80px`,
                     }
             }
             ]
@@ -471,7 +472,6 @@ function init_chart(id, data) {
                 chart: {
                     fontFamily: "inherit",
                     type: "area",
-
                     height: a,
                     toolbar: {
                         show: !1
@@ -492,7 +492,7 @@ function init_chart(id, data) {
                     type: "gradient",
                     gradient: {
                         shadeIntensity: 0.2,
-                        opacityFrom: .6,
+                        opacityFrom: .9,
                         // shadeIntensity: 1,
                         // opacityFrom: .4,
                         opacityTo: 0.20,
@@ -575,7 +575,6 @@ function init_chart(id, data) {
 }
 
 document.getElementById('datatable-search-input').addEventListener('input', (e) => {
-
     table_loaded ? table.search(e.target.value, true, false).draw() : undefined
 });
 
