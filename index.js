@@ -231,6 +231,8 @@ function generate_table() {
 
 }
 
+
+
 function generateDatainTable(data){
     data.forEach(val=>{
             chart_metadata[`${val["name"]}USDT`] = {data: [val["price"]]}
@@ -401,6 +403,7 @@ function chart_element(id_val){
 }
 
 function logo(image){
+
     let td = create_element("td")
     full_elements_order(td,
         [
@@ -420,10 +423,10 @@ function logo(image){
                     }
             },
             {
-                "type" : "i",
+                "type" : "img",
                 "properties" :
                     {
-                        "src" : image,
+                        "src" : `./assets/SVG/${image}.svg`,
                         "style": `font-size: 34px; filter:  ${set_logo_color()}`,
                         "class":`cf cf-${image} dark-image-class`
                     }
@@ -577,4 +580,6 @@ function init_chart(id, data) {
 document.getElementById('datatable-search-input').addEventListener('input', (e) => {
     table_loaded ? table.search(e.target.value, true, false).draw() : undefined
 });
+
+
 
